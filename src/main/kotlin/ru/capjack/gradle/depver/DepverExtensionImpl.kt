@@ -13,7 +13,17 @@ open class DepverExtensionImpl(private val project: Project) : DepverExtension {
 	override var configFile = project.file("gradle-depver.yml")
 	
 	override fun get(dependency: String): String? {
-		return versions[dependency] ?: parent?.let { it[dependency] }
+		val version = versions[dependency] ?: parent?.let { it[dependency] }
+		
+		if (version == null) {
+			for ((d, v) in versions) {
+				if (d.endsWith('*') && dependency.startsWith(d.substring(0, d.lastIndex))) {
+					return v
+				}
+			}
+		}
+		
+		return version
 	}
 	
 	override fun get(group: String, name: String): String? {
@@ -26,5 +36,23 @@ open class DepverExtensionImpl(private val project: Project) : DepverExtension {
 	
 	override fun set(group: String, name: String, version: String) {
 		set("$group:$name", version)
+	}
+	
+	override fun String.invoke(version: String) {
+		set(this, version)
+	}
+	
+	override fun String.invoke(groupBlock: DepverExtension.Group.() -> Unit) {
+		GroupImpl(this)
+	}
+	
+	private inner class GroupImpl(private val group: String) : DepverExtension.Group {
+		override fun set(name: String, version: String) {
+			this@DepverExtensionImpl[group, name] = version
+		}
+		
+		override fun String.invoke(version: String) {
+			set(this, version)
+		}
 	}
 }
