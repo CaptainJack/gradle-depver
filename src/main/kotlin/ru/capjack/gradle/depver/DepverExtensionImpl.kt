@@ -43,7 +43,7 @@ open class DepverExtensionImpl(private val project: Project) : DepverExtension {
 	}
 	
 	override fun String.invoke(groupBlock: DepverExtension.Group.() -> Unit) {
-		GroupImpl(this)
+		GroupImpl(this).apply(groupBlock)
 	}
 	
 	private inner class GroupImpl(private val group: String) : DepverExtension.Group {
