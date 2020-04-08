@@ -34,6 +34,9 @@ class DepverPlugin : Plugin<Project> {
 					}
 				}
 			}
+			resolutionStrategy.eachDependency {
+				extension[requested.group, requested.name]?.also(::useVersion)
+			}
 		}
 	}
 	
