@@ -2,8 +2,8 @@ plugins {
 	`kotlin-dsl`
 	`java-gradle-plugin`
 	`maven-publish`
-	id("com.gradle.plugin-publish") version "0.11.0"
-	id("nebula.release") version "14.1.1"
+	id("com.gradle.plugin-publish") version "0.12.0"
+	id("nebula.release") version "15.1.0"
 }
 
 group = "ru.capjack.gradle"
@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
 	implementation(kotlin("gradle-plugin"))
-	implementation("org.yaml:snakeyaml:1.24")
+	implementation("org.yaml:snakeyaml:1.26")
 }
 
 kotlinDslPluginOptions {
